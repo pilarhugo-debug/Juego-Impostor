@@ -62,25 +62,32 @@
   <script>
     function iniciarJuego() {
   document.getElementById("inicio").style.display = "none";
-  document.getElementById("juego").style.display = "block";
+  const juego = document.getElementById("juego");
+  juego.style.display = "block";
+  juego.classList.add("visible");
+
+  let num = prompt("¿Cuántos jugadores?");
+  numJugadores = parseInt(num);
+  if (isNaN(numJugadores) || numJugadores < 3) {
+    alert("Debe haber al menos 3 jugadores.");
+    location.reload();
+    return;
+  }
+
+  impostor = Math.floor(Math.random() * numJugadores);
+  personajeComun = personajes[Math.floor(Math.random() * personajes.length)];
 }
+    let numJugadores;
+    let impostor;
+    let personajeComun;
+    let actual = 0;
+
     const personajes = [
       "Bruja", "Vampiro", "Calabaza", "Fantasma", "Esqueleto", 
       "Drácula", "Frankenstein", "Chucky", "Pennywise", "Jason", "Freddy Kruger", "Michael Mayers", "Annabelle",
       "Ghostface", "Beetlejuice", "Merlina", "Jigsaw", "Leatherface", "Slenderman", "Coraline", "Casper", "Salem",
       "Homero", "Morticia", "hombre lobo", "calabaza", "murciélago", "momia"
     ];
-
-    let numJugadores = prompt("¿Cuántos jugadores?");
-    numJugadores = parseInt(numJugadores);
-    if (numJugadores < 3) {
-      alert("Debe haber al menos 3 jugadores.");
-      location.reload();
-    }
-
-    const impostor = Math.floor(Math.random() * numJugadores);
-    const personajeComun = personajes[Math.floor(Math.random() * personajes.length)];
-    let actual = 0;
 
    function siguienteJugador() {
   if (actual >= numJugadores) {
@@ -103,6 +110,7 @@
   </script>
 </body>
 </html>
+
 
 
 
