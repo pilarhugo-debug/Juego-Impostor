@@ -5,78 +5,61 @@
   <title>Juego del Impostor Halloween</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-  body {
-    background-color: #1a1a1a;
-    color: #f5f5f5;
-    font-family: 'Segoe UI', sans-serif;
-    text-align: center;
-    padding: 20px;
-  }
+    body {
+      background-color: #1a1a1a;
+      color: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
 
-  h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
-    color: #ff6600;
-  }
+    h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #ff6600;
+    }
 
-  button {
-    background-color: #ff6600;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-  }
+    button {
+      background-color: #ff6600;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
 
-  button:hover {
-    background-color: #cc5200;
-  }
+    button:hover {
+      background-color: #cc5200;
+    }
 
-  #mensaje {
-    margin-top: 30px;
-    font-size: 20px;
-  }
-</style>
-
+    #mensaje {
+      margin-top: 30px;
+      font-size: 20px;
+    }
+  </style>
 </head>
 <body>
   <div id="inicio">
-  <h2>🎃 Juego del Impostor Halloween</h2>
-  <p>Presioná el botón para comenzar la partida. Pasá el celular entre jugadores para ver sus roles.</p>
-  <button onclick="iniciarJuego()">Comenzar partida</button>
-</div>
+    <h2>🎃 Juego del Impostor Halloween</h2>
+    <p>Presioná el botón para comenzar la partida. Pasá el celular entre jugadores para ver sus roles.</p>
+    <button onclick="iniciarJuego()">Comenzar partida</button>
+  </div>
 
-<div id="juego" style="display:none;">
-  <button onclick="siguienteJugador()">Ver mi rol</button>
-  <p id="mensaje"></p>
-</div>
+  <div id="juego" style="display:none;">
+    <button onclick="siguienteJugador()">Ver mi rol</button>
+    <p id="mensaje"></p>
+  </div>
+
   <div id="final" style="display:none;">
-  <h2>🎉 Todos los roles han sido asignados</h2>
-  <p>¡Que comience el juego!</p>
-  <button onclick="location.reload()">🔁 Reiniciar partida</button>
-</div>
+    <h2>🎉 Todos los roles han sido asignados</h2>
+    <p>¡Que comience el juego!</p>
+    <button onclick="location.reload()">🔁 Reiniciar partida</button>
+  </div>
 
   <script>
-    function iniciarJuego() {
-  document.getElementById("inicio").style.display = "none";
-  const juego = document.getElementById("juego");
-  juego.style.display = "block";
-  juego.classList.add("visible");
-
-  let num = prompt("¿Cuántos jugadores?");
-  numJugadores = parseInt(num);
-  if (isNaN(numJugadores) || numJugadores < 3) {
-    alert("Debe haber al menos 3 jugadores.");
-    location.reload();
-    return;
-  }
-
-  impostor = Math.floor(Math.random() * numJugadores);
-  personajeComun = personajes[Math.floor(Math.random() * personajes.length)];
-}
     let numJugadores;
     let impostor;
     let personajeComun;
@@ -89,27 +72,46 @@
       "Homero", "Morticia", "hombre lobo", "calabaza", "murciélago", "momia"
     ];
 
-   function siguienteJugador() {
-  if (actual >= numJugadores) {
-    document.getElementById("juego").style.display = "none";
-    document.getElementById("final").style.display = "block";
-    return;
-  }
+    function iniciarJuego() {
+      document.getElementById("inicio").style.display = "none";
+      document.getElementById("juego").style.display = "block";
 
-  let mensaje;
-  if (actual === impostor) {
-    mensaje = `Jugador ${actual + 1}: 🕵️‍♂️ Eres el impostor. ¡Debes mentir!`;
-  } else {
-    mensaje = `Jugador ${actual + 1}: 👤 Tu personaje es: ${personajeComun}`;
-  }
+      let num = prompt("¿Cuántos jugadores?");
+      numJugadores = parseInt(num);
+      if (isNaN(numJugadores) || numJugadores < 3) {
+        alert("Debe haber al menos 3 jugadores.");
+        location.reload();
+        return;
+      }
 
-  alert(mensaje);
-  document.getElementById("mensaje").innerText = `Pasa el celular al Jugador ${actual + 2}.`;
-  actual++;
-}
+      impostor = Math.floor(Math.random() * numJugadores);
+      personajeComun = personajes[Math.floor(Math.random() * personajes.length)];
+    }
+
+    function siguienteJugador() {
+      if (actual >= numJugadores) {
+        document.getElementById("juego").style.display = "none";
+        document.getElementById("final").style.display = "block";
+        return;
+      }
+
+      let mensaje;
+      if (actual === impostor) {
+        mensaje = `Jugador ${actual + 1}: 🕵️‍♂️ Eres el impostor. ¡Debes mentir!`;
+      } else {
+        mensaje = `Jugador ${actual + 1}: 👤 Tu personaje es: ${personajeComun}`;
+      }
+
+      alert(mensaje);
+      document.getElementById("mensaje").innerText = actual < numJugadores - 1
+        ? `Pasa el celular al Jugador ${actual + 2}.`
+        : `Todos los jugadores ya vieron su rol.`;
+      actual++;
+    }
   </script>
 </body>
 </html>
+
 
 
 
