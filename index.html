@@ -23,9 +23,9 @@
       padding: 10px;
       border-radius: 8px;
       border: none;
-      width: 150px;
+      width: 200px;
       text-align: center;
-      margin-top: 10px;
+      margin: 10px;
       font-size: 16px;
     }
 
@@ -62,8 +62,11 @@
 <body>
   <div id="inicio" class="fade">
     <h2>🎃 Juego del Impostor Halloween</h2>
-    <p>Ingresá la cantidad de jugadores y comenzá la partida.</p>
+    <p>Ingresá la cantidad de jugadores y cuántos serán impostores.</p>
+
     <input type="number" id="numJugadoresInput" min="3" placeholder="Jugadores (min 3)">
+    <br>
+    <input type="number" id="numImpostoresInput" min="1" placeholder="Impostores (min 1)">
     <br>
     <button onclick="iniciarJuego()">Comenzar partida</button>
   </div>
@@ -83,7 +86,8 @@
 
   <script>
     let numJugadores;
-    let impostor;
+    let numImpostores;
+    let impostores = [];
     let personajeComun;
     let actual = 0;
     let mostrando = false;
@@ -97,17 +101,40 @@
     ];
 
     function iniciarJuego() {
-      const input = document.getElementById("numJugadoresInput");
-      numJugadores = parseInt(input.value);
+      const inputJugadores = document.getElementById("numJugadoresInput");
+      const inputImpostores = document.getElementById("numImpostoresInput");
+
+      numJugadores = parseInt(inputJugadores.value);
+      numImpostores = parseInt(inputImpostores.value);
 
       if (isNaN(numJugadores) || numJugadores < 3) {
         alert("Debe haber al menos 3 jugadores.");
         return;
       }
 
-      impostor = Math.floor(Math.random() * numJugadores);
+      if (isNaN(numImpostores) || numImpostores < 1) {
+        alert("Debe haber al menos 1 impostor.");
+        return;
+      }
+
+      if (numImpostores >= numJugadores) {
+        alert("El número de impostores debe ser menor al de jugadores.");
+        return;
+      }
+
+      // Elegir impostores al azar
+      impostores = [];
+      while (impostores.length < numImpostores) {
+        let nuevo = Math.floor(Math.random() * numJugadores);
+        if (!impostores.includes(nuevo)) {
+          impostores.push(nuevo);
+        }
+      }
+
+      // Elegir personaje común
       personajeComun = personajes[Math.floor(Math.random() * personajes.length)];
 
+      // Cambiar pantalla
       document.getElementById("inicio").classList.add("oculto");
       document.getElementById("juego").classList.remove("oculto");
       actualizarTexto();
@@ -118,8 +145,19 @@
       const mensaje = document.getElementById("mensaje");
 
       if (!mostrando) {
-        if (actual === impostor) {
-          rolTexto.innerHTML = "🕵️‍♂️ Eres el <strong>IMPOSTOR</strong>. ¡Debes mentir!";
+        if (impostores.includes(actual)) {
+          // Mostrar otros impostores (excluyendo el jugador actual)
+          const otrosImpostores = impostores
+            .filter(i => i !== actual)
+            .map(i => i + 1); // +1 para mostrar número humano
+          
+          let texto = `🕵️‍♂️ Eres un <strong>IMPOSTOR</strong>.`;
+          if (otrosImpostores.length > 0) {
+            texto += `<br>Los otros impostores son los jugadores: <strong>${otrosImpostores.join(", ")}</strong>.`;
+          }
+          texto += `<br>¡Debes mentir y confundír a los demás!`;
+          rolTexto.innerHTML = texto;
+
         } else {
           rolTexto.innerHTML = `👤 Tu personaje es: <strong>${personajeComun}</strong>`;
         }
@@ -146,3 +184,5 @@
   </script>
 </body>
 </html>
+
+
